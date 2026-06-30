@@ -1,0 +1,389 @@
+<!-- Polla Mundialista 2026 - desde Dieciseisavos -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polla Mundialista 2026</title>
+<style>
+  :root{
+    --pitch:#0b1f2a;        /* fondo noche de estadio */
+    --pitch2:#10303f;
+    --card:#ffffff;
+    --ink:#11242e;
+    --muted:#5d7480;
+    --line:#e3e9ec;
+    --gold:#f2b705;         /* acento trofeo */
+    --gold-deep:#c8930a;
+    --green:#0f9d58;        /* césped / acierto */
+    --coral:#e8543f;        /* secundario */
+    --soft:#f4f7f8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--pitch);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 16px 64px}
+
+  /* Cabecera */
+  header{background:linear-gradient(160deg,var(--pitch) 0%,var(--pitch2) 100%);
+    color:#fff;padding:28px 16px 22px;border-bottom:3px solid var(--gold)}
+  .head-inner{max-width:1040px;margin:0 auto}
+  .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  h1{margin:6px 0 4px;font-size:30px;line-height:1.04;text-transform:uppercase;letter-spacing:.01em}
+  h1 b{color:var(--gold)}
+  .sub{color:#aebfc8;font-size:14px;max-width:640px}
+
+  /* Marcador / bolsas */
+  .scoreboard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+  .sb{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;
+    padding:12px 14px}
+  .sb .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9fb3bd}
+  .sb .val{font-size:24px;font-weight:800;color:#fff;margin-top:3px;font-variant-numeric:tabular-nums}
+  .sb.gold .val{color:var(--gold)}
+  .sb.coral .val{color:#ff8a76}
+
+  /* Tarjetas */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+  .card h2{margin:0 0 4px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .card .hint{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+
+  label{display:block;font-size:12px;font-weight:700;color:var(--ink);margin:0 0 5px}
+  input[type=text],select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:15px;background:#fff;color:var(--ink)}
+  input[type=text]:focus,select:focus{outline:none;border-color:var(--gold)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:13px}
+  .row.one{grid-template-columns:1fr}
+  .pay{display:flex;align-items:center;gap:8px;margin:2px 0 16px;font-size:14px;color:var(--ink)}
+  .pay input{width:18px;height:18px;accent-color:var(--green)}
+
+  button{cursor:pointer;border:none;border-radius:9px;font-weight:700;font-size:14px;font-family:inherit}
+  .btn-main{background:var(--gold);color:#1a1207;padding:12px 18px;width:100%}
+  .btn-main:hover{background:var(--gold-deep);color:#fff}
+  .btn-ghost{background:var(--soft);color:var(--ink);padding:9px 14px;border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--muted)}
+  .btn-danger{background:transparent;color:var(--coral);padding:4px 8px;font-size:13px}
+
+  /* Config */
+  .cfg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+  .cfg input{width:100%;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:14px}
+  .cfg .lbl{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;display:block}
+  .warn{background:#fff7e6;border:1px solid #f2d98a;color:#8a6400;font-size:12.5px;
+    padding:8px 10px;border-radius:8px;margin-top:4px;display:none}
+
+  /* Lista concursantes */
+  .list-card{margin-top:18px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+  .pill.ok{background:#e3f5ea;color:#0f7a44}
+  .pill.no{background:#fde8e4;color:#c0392b}
+  .win-tag{display:inline-block;font-size:11px;font-weight:800;color:#1a1207;background:var(--gold);
+    padding:2px 7px;border-radius:5px;margin-left:6px}
+  .empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px}
+
+  /* Resultados */
+  .result-banner{display:none;background:linear-gradient(120deg,#0f3d2e,#0f9d58);color:#fff;
+    border-radius:12px;padding:16px 18px;margin-top:14px}
+  .result-banner h3{margin:0 0 8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#bff3d6}
+  .winners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  .winbox{background:rgba(255,255,255,.1);border-radius:10px;padding:12px}
+  .winbox .t{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#cdeede}
+  .winbox .names{font-size:14px;font-weight:700;margin-top:6px;line-height:1.4}
+  .winbox .each{font-size:13px;color:#eafff3;margin-top:6px}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .note{font-size:12px;color:#8fa4ae;margin-top:18px;line-height:1.5}
+  .share-note{background:rgba(242,183,5,.12);border:1px solid rgba(242,183,5,.4);color:#f2b705;
+    font-size:12.5px;padding:9px 12px;border-radius:9px;margin-top:14px}
+
+  @media(max-width:780px){.grid{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr 1fr}
+    .row{grid-template-columns:1fr}.winners{grid-template-columns:1fr}h1{font-size:24px}
+    table{font-size:13px}th:nth-child(4),td:nth-child(4){display:none}}
+  @media print{header{background:#fff;color:#000;border-bottom:2px solid #000}
+    .kicker,h1 b,.sb .val{color:#000 !important}.card{box-shadow:none;border:1px solid #000}
+    .toolbar,.btn-main,.btn-ghost,.btn-danger,.share-note{display:none !important}
+    body{background:#fff}.sb{border:1px solid #999}}
+</style>
+
+<header>
+  <div class="head-inner">
+    <div class="kicker">Mundial 2026 · Canadá · México · EE.UU.</div>
+    <h1>Polla Mundialista <b>desde Dieciseisavos</b></h1>
+    <p class="sub">Cada quien elige <b>Campeón</b> y <b>Vicecampeón</b>. Aporte para concursar y reparto automático de premios. 32 selecciones en carrera por el título del 19 de julio.</p>
+    <div class="scoreboard">
+      <div class="sb"><div class="lbl">Concursantes</div><div class="val" id="sbCount">0</div></div>
+      <div class="sb"><div class="lbl">Recaudado</div><div class="val" id="sbTotal">$0</div></div>
+      <div class="sb gold"><div class="lbl">Bolsa Campeón</div><div class="val" id="sbChamp">$0</div></div>
+      <div class="sb coral"><div class="lbl">Bolsa Vice</div><div class="val" id="sbVice">$0</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <!-- Inscripción -->
+    <div class="card">
+      <h2>Inscribir concursante</h2>
+      <p class="hint">Registra a cada participante con su pronóstico. El campeón y el vice deben ser equipos distintos.</p>
+      <div class="row one">
+        <div><label for="nombre">Nombre del concursante</label>
+          <input type="text" id="nombre" placeholder="Ej: Pablo Caicedo" autocomplete="off"></div>
+      </div>
+      <div class="row">
+        <div><label for="champ">🏆 Campeón</label>
+          <select id="champ"></select></div>
+        <div><label for="vice">🥈 Vicecampeón</label>
+          <select id="vice"></select></div>
+      </div>
+      <div class="pay">
+        <input type="checkbox" id="pago" checked>
+        <label for="pago" style="margin:0;font-weight:600">Ya entregó el aporte</label>
+      </div>
+      <button class="btn-main" id="addBtn">Agregar a la polla</button>
+    </div>
+
+    <!-- Reglas / config -->
+    <div class="card">
+      <h2>Reglas del bolsillo</h2>
+      <p class="hint">Valores por concursante. La suma de los dos premios debe igualar el aporte para que el dinero cuadre.</p>
+      <div class="cfg">
+        <div><span class="lbl">Aporte ($)</span><input type="number" id="cAporte" value="3" min="0" step="0.25"></div>
+        <div><span class="lbl">Premio campeón ($)</span><input type="number" id="cChamp" value="2" min="0" step="0.25"></div>
+        <div><span class="lbl">Premio vice ($)</span><input type="number" id="cVice" value="1" min="0" step="0.25"></div>
+      </div>
+      <div class="warn" id="cfgWarn"></div>
+      <p class="hint" style="margin-top:14px">Cómo se reparte: la <b>bolsa de campeón</b> ($2 × concursantes) se divide entre todos los que atinaron al campeón; la <b>bolsa de vice</b> ($1 × concursantes) entre los que atinaron al vice. Si varios aciertan, se reparten en partes iguales.</p>
+
+      <h2 style="margin-top:18px">Resultado final del Mundial</h2>
+      <p class="hint">Cuando termine la final, elige aquí quién quedó campeón y vice para repartir.</p>
+      <div class="row">
+        <div><label for="realChamp">Campeón real</label><select id="realChamp"></select></div>
+        <div><label for="realVice">Vice real</label><select id="realVice"></select></div>
+      </div>
+      <button class="btn-ghost" id="calcBtn" style="width:100%">Calcular ganadores</button>
+    </div>
+  </div>
+
+  <!-- Banner ganadores -->
+  <div class="result-banner" id="banner">
+    <h3>Ganadores de la polla</h3>
+    <div class="winners">
+      <div class="winbox">
+        <div class="t">🏆 Atinaron al Campeón <span id="bChampTeam"></span></div>
+        <div class="names" id="bChampNames"></div>
+        <div class="each" id="bChampEach"></div>
+      </div>
+      <div class="winbox">
+        <div class="t">🥈 Atinaron al Vice <span id="bViceTeam"></span></div>
+        <div class="names" id="bViceNames"></div>
+        <div class="each" id="bViceEach"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista -->
+  <div class="card list-card">
+    <h2>Concursantes inscritos</h2>
+    <p class="hint" id="listHint">Aún no hay nadie en la polla.</p>
+    <div style="overflow-x:auto">
+      <table id="tbl">
+        <thead><tr><th>#</th><th>Concursante</th><th>🏆 Campeón</th><th>🥈 Vice</th><th>Aporte</th><th></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="toolbar">
+      <button class="btn-ghost" id="printBtn">Imprimir / Guardar PDF</button>
+      <button class="btn-ghost" id="csvBtn">Descargar Excel (CSV)</button>
+      <button class="btn-ghost" id="copyBtn">Copiar resumen para WhatsApp</button>
+      <button class="btn-ghost" id="resetBtn" style="margin-left:auto;color:var(--coral)">Vaciar polla</button>
+    </div>
+    <div class="share-note">Esta polla se guarda y se comparte: todo el que abra este archivo verá y podrá editar la misma lista. Para remitirla, usa “Imprimir / Guardar PDF” o “Copiar resumen para WhatsApp”.</div>
+  </div>
+
+  <p class="note">Polla amistosa de pronósticos del Mundial 2026. La herramienta solo organiza y calcula; la entrega del dinero la maneja el organizador entre los participantes.</p>
+</div>
+
+<script>
+const TEAMS = [
+  ["Alemania","🇩🇪"],["Argelia","🇩🇿"],["Argentina","🇦🇷"],["Australia","🇦🇺"],
+  ["Austria","🇦🇹"],["Bélgica","🇧🇪"],["Bosnia y Herzegovina","🇧🇦"],["Brasil","🇧🇷"],
+  ["Cabo Verde","🇨🇻"],["Canadá","🇨🇦"],["Colombia","🇨🇴"],["Costa de Marfil","🇨🇮"],
+  ["Croacia","🇭🇷"],["Ecuador","🇪🇨"],["Egipto","🇪🇬"],["España","🇪🇸"],
+  ["Estados Unidos","🇺🇸"],["Francia","🇫🇷"],["Ghana","🇬🇭"],["Inglaterra","🏴󠁧󠁢󠁥󠁮󠁧󠁿"],
+  ["Japón","🇯🇵"],["Marruecos","🇲🇦"],["México","🇲🇽"],["Noruega","🇳🇴"],
+  ["Países Bajos","🇳🇱"],["Paraguay","🇵🇾"],["Portugal","🇵🇹"],["RD Congo","🇨🇩"],
+  ["Senegal","🇸🇳"],["Sudáfrica","🇿🇦"],["Suecia","🇸🇪"],["Suiza","🇨🇭"]
+];
+const flag = n => (TEAMS.find(t=>t[0]===n)||["",""])[1];
+
+const KEY='pollamundial2026:v1';
+let state = { participantes:[], resultado:{champ:"",vice:""} };
+let mem = false; // modo memoria si storage falla
+
+async function load(){
+  try{
+    const r = await window.storage.get(KEY, true);
+    if(r && r.value){ state = JSON.parse(r.value); }
+  }catch(e){ /* no existe aún o sin storage */ 
+    try{ const r2=await window.storage.get(KEY,true); if(r2&&r2.value) state=JSON.parse(r2.value);}catch(_){ mem=true; }
+  }
+  if(!state.participantes) state.participantes=[];
+  if(!state.resultado) state.resultado={champ:"",vice:""};
+}
+async function save(){
+  if(mem) return;
+  try{ await window.storage.set(KEY, JSON.stringify(state), true); }
+  catch(e){ mem=true; }
+}
+
+function cfg(){
+  const a=parseFloat(document.getElementById('cAporte').value)||0;
+  const c=parseFloat(document.getElementById('cChamp').value)||0;
+  const v=parseFloat(document.getElementById('cVice').value)||0;
+  const w=document.getElementById('cfgWarn');
+  if(Math.abs((c+v)-a)>0.001){
+    w.style.display='block';
+    w.textContent=`Aviso: premio campeón ($${c}) + premio vice ($${v}) = $${(c+v).toFixed(2)}, no coincide con el aporte de $${a}. Ajusta para que la bolsa cuadre.`;
+  } else { w.style.display='none'; }
+  return {a,c,v};
+}
+const money = n => '$'+(Math.round(n*100)/100).toFixed(2).replace(/\.00$/,'');
+
+function fillSelect(sel, withBlank, blankTxt){
+  sel.innerHTML='';
+  if(withBlank){ const o=document.createElement('option');o.value='';o.textContent=blankTxt||'— sin definir —';sel.appendChild(o); }
+  TEAMS.forEach(([n,f])=>{ const o=document.createElement('option');o.value=n;o.textContent=f+' '+n;sel.appendChild(o); });
+}
+
+function render(){
+  const {a,c,v}=cfg();
+  const pagados = state.participantes.filter(p=>p.pago);
+  const n = pagados.length;
+  document.getElementById('sbCount').textContent = state.participantes.length;
+  document.getElementById('sbTotal').textContent = money(n*a);
+  document.getElementById('sbChamp').textContent = money(n*c);
+  document.getElementById('sbVice').textContent  = money(n*v);
+
+  const tb=document.getElementById('tbody'); tb.innerHTML='';
+  const rc=state.resultado.champ, rv=state.resultado.vice;
+  if(state.participantes.length===0){
+    document.getElementById('listHint').textContent='Aún no hay nadie en la polla.';
+    tb.innerHTML='<tr><td colspan="6" class="empty">Inscribe al primer concursante para empezar 🏆</td></tr>';
+  } else {
+    document.getElementById('listHint').textContent=state.participantes.length+' concursante(s) inscrito(s).';
+    state.participantes.forEach((p,i)=>{
+      const winC = rc && p.champ===rc, winV = rv && p.vice===rv;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${i+1}</td>
+        <td><b>${esc(p.nombre)}</b>${winC?'<span class="win-tag">🏆</span>':''}${winV?'<span class="win-tag">🥈</span>':''}</td>
+        <td>${flag(p.champ)} ${esc(p.champ)}</td>
+        <td>${flag(p.vice)} ${esc(p.vice)}</td>
+        <td>${p.pago?'<span class="pill ok">Pagó</span>':'<span class="pill no">Debe</span>'}</td>
+        <td><button class="btn-danger" data-i="${i}">✕</button></td>`;
+      tb.appendChild(tr);
+    });
+    tb.querySelectorAll('.btn-danger').forEach(b=>b.onclick=async()=>{
+      state.participantes.splice(+b.dataset.i,1); await save(); render();
+    });
+  }
+  renderWinners(n,c,v);
+}
+
+function renderWinners(n,c,v){
+  const b=document.getElementById('banner');
+  const rc=state.resultado.champ, rv=state.resultado.vice;
+  if(!rc && !rv){ b.style.display='none'; return; }
+  b.style.display='block';
+  const pagados=state.participantes.filter(p=>p.pago);
+  // campeón
+  const wc=pagados.filter(p=>p.champ===rc);
+  const bolsaC=n*c;
+  document.getElementById('bChampTeam').textContent = rc?('· '+flag(rc)+' '+rc):'';
+  document.getElementById('bChampNames').textContent = wc.length?wc.map(p=>p.nombre).join(', '):'Nadie atinó al campeón.';
+  document.getElementById('bChampEach').textContent = wc.length?('Bolsa '+money(bolsaC)+' → '+money(bolsaC/wc.length)+' cada uno'):(rc?'La bolsa de '+money(bolsaC)+' queda sin reclamar.':'');
+  // vice
+  const wv=pagados.filter(p=>p.vice===rv);
+  const bolsaV=n*v;
+  document.getElementById('bViceTeam').textContent = rv?('· '+flag(rv)+' '+rv):'';
+  document.getElementById('bViceNames').textContent = wv.length?wv.map(p=>p.nombre).join(', '):'Nadie atinó al vice.';
+  document.getElementById('bViceEach').textContent = wv.length?('Bolsa '+money(bolsaV)+' → '+money(bolsaV/wv.length)+' cada uno'):(rv?'La bolsa de '+money(bolsaV)+' queda sin reclamar.':'');
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+async function add(){
+  const nombre=document.getElementById('nombre').value.trim();
+  const champ=document.getElementById('champ').value;
+  const vice=document.getElementById('vice').value;
+  const pago=document.getElementById('pago').checked;
+  if(!nombre){ alert('Escribe el nombre del concursante.'); return; }
+  if(champ===vice){ alert('El campeón y el vicecampeón deben ser equipos distintos.'); return; }
+  state.participantes.push({nombre,champ,vice,pago});
+  await save();
+  document.getElementById('nombre').value='';
+  document.getElementById('nombre').focus();
+  render();
+}
+
+async function calc(){
+  state.resultado.champ=document.getElementById('realChamp').value;
+  state.resultado.vice=document.getElementById('realVice').value;
+  await save(); render();
+  document.getElementById('banner').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function csv(){
+  const {a}=cfg();
+  let out='Nro,Concursante,Campeon,Vicecampeon,Aporte\n';
+  state.participantes.forEach((p,i)=>{
+    out+=`${i+1},"${p.nombre}","${p.champ}","${p.vice}",${p.pago?a:0}\n`;
+  });
+  const blob=new Blob(['\ufeff'+out],{type:'text/csv;charset=utf-8'});
+  const u=URL.createObjectURL(blob);const a2=document.createElement('a');
+  a2.href=u;a2.download='Polla_Mundialista_2026.csv';a2.click();URL.revokeObjectURL(u);
+}
+
+function copyResumen(){
+  const {a,c,v}=cfg();
+  const n=state.participantes.filter(p=>p.pago).length;
+  let t='🏆 POLLA MUNDIALISTA 2026 (desde 16vos)\n';
+  t+=`Aporte $${a} · Campeón $${c} · Vice $${v}\n`;
+  t+=`Concursantes: ${state.participantes.length} · Recaudado: ${money(n*a)}\n`;
+  t+=`Bolsa Campeón ${money(n*c)} · Bolsa Vice ${money(n*v)}\n\n`;
+  state.participantes.forEach((p,i)=>{
+    t+=`${i+1}. ${p.nombre} → Campeón: ${p.champ} | Vice: ${p.vice}${p.pago?'':' (DEBE)'}\n`;
+  });
+  navigator.clipboard.writeText(t).then(()=>alert('Resumen copiado. Pégalo en WhatsApp o correo.'),
+    ()=>alert('No se pudo copiar automáticamente.'));
+}
+
+async function reset(){
+  if(!confirm('¿Vaciar toda la polla? Se borran los concursantes y el resultado.')) return;
+  state={participantes:[],resultado:{champ:"",vice:""}};
+  document.getElementById('realChamp').value='';
+  document.getElementById('realVice').value='';
+  await save(); render();
+}
+
+// init
+fillSelect(document.getElementById('champ'),false);
+fillSelect(document.getElementById('vice'),false);
+document.getElementById('vice').selectedIndex=1;
+fillSelect(document.getElementById('realChamp'),true,'— sin definir —');
+fillSelect(document.getElementById('realVice'),true,'— sin definir —');
+document.getElementById('addBtn').onclick=add;
+document.getElementById('calcBtn').onclick=calc;
+document.getElementById('printBtn').onclick=()=>window.print();
+document.getElementById('csvBtn').onclick=csv;
+document.getElementById('copyBtn').onclick=copyResumen;
+document.getElementById('resetBtn').onclick=reset;
+['cAporte','cChamp','cVice'].forEach(id=>document.getElementById(id).oninput=render);
+document.getElementById('nombre').addEventListener('keydown',e=>{if(e.key==='Enter')add();});
+
+(async()=>{ await load();
+  if(state.resultado.champ) document.getElementById('realChamp').value=state.resultado.champ;
+  if(state.resultado.vice) document.getElementById('realVice').value=state.resultado.vice;
+  render();
+})();
+</script>
